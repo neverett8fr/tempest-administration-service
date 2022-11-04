@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 	"log"
-	entities "tempest-administration-service/pkg/entitites"
+	"tempest-administration-service/pkg/entities"
 
 	"golang.org/x/crypto/bcrypt"
 )

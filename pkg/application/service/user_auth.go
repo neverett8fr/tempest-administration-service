@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	entities "tempest-administration-service/pkg/entitites"
+	"tempest-administration-service/pkg/entities"
 
 	"github.com/gorilla/mux"
 )
@@ -43,7 +43,6 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 		writeReponse(w, body)
 		return
 	}
-
 	user, err := entities.NewUser(userInformation.Username, userInformation.Password)
 	if err != nil {
 		body := NewResponse(nil, err)
