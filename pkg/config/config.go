@@ -28,7 +28,7 @@ type DB struct {
 
 type Config struct {
 	Service Service `yaml:"administration-service-config"`
-	DB      DB      `yaml:"administration-db-config"`
+	DB      DB      `yaml:"user-db-config"`
 }
 
 func Initialise() (*Config, error) {

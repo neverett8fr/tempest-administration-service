@@ -13,8 +13,8 @@ services:
     restart: always
     environment:
     - POSTGRES_DB=administration_db
-    - POSTGRES_ADMINISTRATION=service
-    - POSTGRES_PASSWORD=${ADMINISTRATION_DB_SERVICE_PASS}
+    - POSTGRES_USER=service
+    - POSTGRES_PASSWORD=123LocalDBPass
     logging:
       options:
         max-size: 10m
