@@ -1,7 +1,7 @@
 package db
 
 import (
-	entities "tempest-administration-service/pkg/entitites"
+	"tempest-administration-service/pkg/entities"
 	"testing"
 )
 
