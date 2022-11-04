@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"tempest-user-service/cmd"
-	application "tempest-user-service/pkg/application/service"
-	"tempest-user-service/pkg/config"
+	"tempest-administration-service/cmd"
+	application "tempest-administration-service/pkg/application/service"
+	"tempest-administration-service/pkg/config"
 
 	"github.com/gorilla/mux"
 )
@@ -12,7 +12,7 @@ import (
 // Route declaration
 func getRoutes() *mux.Router {
 	r := mux.NewRouter()
-	application.NewUserInformation(r)
+	application.NewAdministrationInformation(r)
 
 	return r
 }

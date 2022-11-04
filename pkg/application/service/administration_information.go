@@ -3,12 +3,12 @@ package service
 import (
 	"fmt"
 	"net/http"
-	application "tempest-user-service/pkg/application/entities"
+	application "tempest-administration-service/pkg/application/entities"
 
 	"github.com/gorilla/mux"
 )
 
-func NewUserInformation(r *mux.Router) {
+func NewAdministrationInformation(r *mux.Router) {
 	r.HandleFunc("/test/{text}", testHandler).Methods("GET")
 }
 

@@ -12,9 +12,9 @@ services:
     image: postgres:14.5
     restart: always
     environment:
-    - POSTGRES_DB=user_db
-    - POSTGRES_USER=service
-    - POSTGRES_PASSWORD=${USER_DB_SERVICE_PASS}
+    - POSTGRES_DB=administration_db
+    - POSTGRES_ADMINISTRATION=service
+    - POSTGRES_PASSWORD=${ADMINISTRATION_DB_SERVICE_PASS}
     logging:
       options:
         max-size: 10m
