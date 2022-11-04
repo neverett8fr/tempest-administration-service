@@ -6,13 +6,15 @@ import (
 	"log"
 	"net/http"
 
+	autho "tempest-administration-service/pkg/infra/auth"
 	"tempest-administration-service/pkg/infra/db"
 
 	"github.com/gorilla/mux"
 )
 
 var (
-	DBConn *db.DBConn
+	DBConn        *db.DBConn
+	TokenProvider autho.TokenProvider
 )
 
 type Response struct {
@@ -22,10 +24,12 @@ type Response struct {
 
 func NewServiceRoutes(r *mux.Router, conn *sql.DB) {
 	DBConn = db.NewDBConnFromExisting(conn)
+	TokenProvider = autho.InitialiseTokenProvider(DBConn)
 
 	// newAdministrationInformation(r)
 	// newAdministrationOperation(r)
 	newUserAuth(r)
+	newAdministrationOperation(r)
 }
 
 func NewResponse(data interface{}, err ...error) *Response {

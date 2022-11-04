@@ -12,8 +12,8 @@ import (
 
 func newUserAuth(r *mux.Router) {
 
-	r.HandleFunc("/test/{text}", testHandler).Methods("GET")
-	r.HandleFunc("/user", createUserHandler).Methods("POST")
+	r.HandleFunc("/test/{text}", testHandler).Methods(http.MethodGet)
+	r.HandleFunc("/user", createUserHandler).Methods(http.MethodPost)
 }
 
 func testHandler(w http.ResponseWriter, r *http.Request) {

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	entities "tempest-administration-service/pkg/entitites"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func (conn *DBConn) CreateUser(user entities.User) error {
@@ -47,4 +49,17 @@ func (conn *DBConn) ReadUserID(username string) (string, error) {
 	}
 
 	return id, nil
+}
+
+func (conn *DBConn) VerifyPassword(username string, password string) error {
+
+	row := conn.Conn.QueryRow(fmt.Sprintf("SELECT %s FROM %s WHERE %s = $1", userColumnPasswordHash, userTableUsers, userColumnUsername), username)
+
+	var passwordHash string
+	err := row.Scan(&passwordHash)
+	if err != nil {
+		return fmt.Errorf("error scanning hash, err %v", err)
+	}
+
+	return bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
 }
