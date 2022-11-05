@@ -10,24 +10,30 @@ import (
 // https://stackoverflow.com/questions/48855122/keycloak-adaptor-for-golang-application
 
 type TokenProvider struct {
-	Cache TokenCache
-	DB    *db.DBConn
+	HMACSigningKey []byte
+	Cache          TokenCache
+	DB             *db.DBConn
 }
 
-func (t *TokenProvider) NewToken(username string, password string) (*jwt.Token, error) {
+func (t *TokenProvider) NewToken(username string, password string) (string, error) {
 
 	// check user database
 	// store user passwords here - the other one just for "data"
 
 	err := t.DB.VerifyPassword(username, password)
 	if err != nil {
-		return nil, fmt.Errorf("error verifying password, err %v", err)
+		return "", fmt.Errorf("error verifying password, err %v", err)
 	}
 
-	tok := jwt.New(jwt.SigningMethodES256)
-	t.Cache.CacheToken(tok.Raw)
+	tok := jwt.New(jwt.SigningMethodHS256)
+	tokenString, err := tok.SignedString(t.HMACSigningKey)
+	if err != nil {
+		return "", fmt.Errorf("error signing token, err %v", err)
+	}
 
-	return tok, nil
+	t.Cache.CacheToken(tokenString)
+
+	return tokenString, nil
 
 }
 
@@ -36,10 +42,11 @@ func (t *TokenProvider) CheckToken(tok string) error {
 
 }
 
-func InitialiseTokenProvider(db *db.DBConn) TokenProvider {
+func InitialiseTokenProvider(signingKey string, db *db.DBConn) TokenProvider {
 	return TokenProvider{
-		Cache: NewTokenCache(),
-		DB:    db,
+		HMACSigningKey: []byte(signingKey),
+		Cache:          NewTokenCache(),
+		DB:             db,
 	}
 
 }
