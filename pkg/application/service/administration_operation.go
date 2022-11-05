@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -39,6 +40,12 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 		writeReponse(w, body)
 		return
 	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "token",
+		Value:   tok,
+		Expires: time.Now().Add(time.Hour),
+	})
 
 	body := NewResponse(tokenOut{Token: tok}, err)
 
