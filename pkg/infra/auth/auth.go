@@ -3,6 +3,7 @@ package autho
 import (
 	"fmt"
 	"tempest-administration-service/pkg/infra/db"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -25,7 +26,15 @@ func (t *TokenProvider) NewToken(username string, password string) (string, erro
 		return "", fmt.Errorf("error verifying password, err %v", err)
 	}
 
-	tok := jwt.New(jwt.SigningMethodHS256)
+	cl := &Claims{
+		Username: username,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
+		},
+	}
+
+	tok := jwt.NewWithClaims(jwt.SigningMethodHS256, cl)
+
 	tokenString, err := tok.SignedString(t.HMACSigningKey)
 	if err != nil {
 		return "", fmt.Errorf("error signing token, err %v", err)
