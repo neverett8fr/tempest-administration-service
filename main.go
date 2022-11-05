@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"tempest-administration-service/cmd"
-	application "tempest-administration-service/pkg/application/service"
+	"tempest-administration-service/pkg/application/service"
 	"tempest-administration-service/pkg/config"
 
 	"github.com/gorilla/mux"
@@ -13,7 +13,7 @@ import (
 // Route declaration
 func getRoutes(conn *sql.DB) *mux.Router {
 	r := mux.NewRouter()
-	application.NewServiceRoutes(r, conn)
+	service.NewServiceRoutes(r, conn)
 
 	return r
 }
