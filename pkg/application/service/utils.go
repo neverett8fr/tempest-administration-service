@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"tempest-administration-service/pkg/config"
 	autho "tempest-administration-service/pkg/infra/auth"
 	"tempest-administration-service/pkg/infra/db"
 
@@ -22,9 +23,9 @@ type Response struct {
 	Errors []error     `json:"errors"`
 }
 
-func NewServiceRoutes(r *mux.Router, conn *sql.DB) {
+func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf config.Config) {
 	DBConn = db.NewDBConnFromExisting(conn)
-	TokenProvider = autho.InitialiseTokenProvider(DBConn)
+	TokenProvider = autho.InitialiseTokenProvider(conf.Service.HMACSigningKey, DBConn)
 
 	// newAdministrationInformation(r)
 	// newAdministrationOperation(r)

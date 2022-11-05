@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
+	"tempest-administration-service/pkg/config"
 	"tempest-administration-service/pkg/infra/db"
 	"testing"
 
@@ -63,7 +64,7 @@ func newMockRouter(t *testing.T, dbMock *sql.DB) *mux.Router {
 	mockDBConn := db.NewDBConnFromExisting(dbMock)
 
 	router := mux.NewRouter()
-	NewServiceRoutes(router, mockDBConn.Conn)
+	NewServiceRoutes(router, mockDBConn.Conn, config.Config{Service: config.Service{HMACSigningKey: "testKey"}})
 
 	return router
 }

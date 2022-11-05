@@ -40,7 +40,7 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body := NewResponse(tokenOut{Token: tok.Raw}, err)
+	body := NewResponse(tokenOut{Token: tok}, err)
 
 	writeReponse(w, body)
 }
