@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
+	"tempest-administration-service/pkg/infra/db"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -59,8 +60,10 @@ func newMockAddUser(t *testing.T, m sqlmock.Sqlmock) sqlmock.Sqlmock {
 
 func newMockRouter(t *testing.T, dbMock *sql.DB) *mux.Router {
 
+	mockDBConn := db.NewDBConnFromExisting(dbMock)
+
 	router := mux.NewRouter()
-	newUserAuth(router)
+	NewServiceRoutes(router, mockDBConn.Conn)
 
 	return router
 }
