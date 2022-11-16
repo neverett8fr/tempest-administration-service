@@ -13,6 +13,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const (
+	headerAuth = "Authorization"
+)
+
 var (
 	DBConn        *db.DBConn
 	TokenProvider autho.TokenProvider

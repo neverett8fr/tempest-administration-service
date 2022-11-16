@@ -47,8 +47,26 @@ func (t *TokenProvider) NewToken(username string, password string) (string, erro
 }
 
 func (t *TokenProvider) CheckToken(tok string) error {
-	return t.Cache.Exists(tok)
 
+	err := t.Cache.Exists(tok)
+	if err != nil {
+		return err
+	}
+
+	// https://github.com/MicahParks/keyfunc
+	var keyFunc jwt.Keyfunc = func(token *jwt.Token) (interface{}, error) {
+		return t.HMACSigningKey, nil
+	}
+	parsed, err := jwt.Parse(tok, keyFunc)
+	if err != nil {
+		return fmt.Errorf("error parsing jwt token, err %v", err)
+	}
+
+	if !parsed.Valid {
+		return fmt.Errorf("error, token is not valid")
+	}
+
+	return nil
 }
 
 func InitialiseTokenProvider(signingKey string, db *db.DBConn) TokenProvider {
