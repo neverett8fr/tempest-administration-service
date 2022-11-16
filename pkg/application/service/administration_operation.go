@@ -53,6 +53,16 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 
 func checkToken(w http.ResponseWriter, r *http.Request) {
 	// check headers or vars
+	reqToken := r.Header.Get(headerAuth)
 
-	writeReponse(w, nil)
+	err := TokenProvider.CheckToken(reqToken)
+	if err != nil {
+		body := NewResponse(nil, err)
+		w.WriteHeader(http.StatusUnauthorized)
+		writeReponse(w, body)
+		return
+	}
+
+	body := NewResponse("token is valid", err)
+	writeReponse(w, body)
 }
