@@ -2,6 +2,7 @@ package autho
 
 import (
 	"fmt"
+	"strings"
 	"tempest-administration-service/pkg/infra/db"
 	"time"
 
@@ -47,6 +48,12 @@ func (t *TokenProvider) NewToken(username string, password string) (string, erro
 }
 
 func (t *TokenProvider) CheckToken(tok string) error {
+
+	tokenSplit := strings.Split(tok, "Bearer ")
+	if len(tokenSplit) != 2 {
+		return fmt.Errorf("error removing 'Bearer', incorrect length")
+	}
+	tok = tokenSplit[1]
 
 	err := t.Cache.Exists(tok)
 	if err != nil {
