@@ -9,9 +9,12 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - ADMINISTRATION_DB_HOST=0.0.0.0
+      - ADMINISTRATION_DB_HOST=postgres
       - ADMINISTRATION_DB_SERVICE_PASS=123LocalDBPass
       - ADMINISTRATION_DB_PORT=5432
+      - HMAC_SIGNING_KEY=123PassID
+    networks:
+      - administration-network
   postgres:
     image: postgres:14.5
     restart: always
@@ -29,3 +32,24 @@ services:
       - ./db-data/:/var/lib/postgresql/data/
       # copy the sql script to create tables
       - ./db/migrations/0_init.up.sql:/docker-entrypoint-initdb.d/0_init.up.sql
+    networks:
+      - administration-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-U",
+          "service",
+          "-d",
+          "administration_db",
+          "-h",
+          "localhost"
+        ]
+      interval: 5s
+      retries: 5
+      timeout: 5s
+
+networks:
+  administration-network:
+    driver: bridge
