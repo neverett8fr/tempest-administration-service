@@ -12,6 +12,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/lib/pq v1.10.7
+	github.com/rs/cors v1.9.0
 	golang.org/x/crypto v0.1.0
 )
 
