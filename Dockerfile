@@ -23,6 +23,6 @@ WORKDIR /
 
 COPY --from=builder /tempest-administration-service ./
 
-EXPOSE 8080
+EXPOSE 8083
 
 ENTRYPOINT ["/tempest-administration-service"]

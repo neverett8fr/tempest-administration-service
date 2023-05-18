@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -18,6 +19,7 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 
 	bodyIn, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		log.Printf("error creating token, err %v", err)
 		body := NewResponse(nil, err)
 		w.WriteHeader(http.StatusBadRequest)
 		writeReponse(w, body)
@@ -26,6 +28,7 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 	userInformation := newUserIn{}
 	err = json.Unmarshal(bodyIn, &userInformation)
 	if err != nil {
+		log.Printf("error creating token, err %v", err)
 		body := NewResponse(nil, err)
 		w.WriteHeader(http.StatusBadRequest)
 		writeReponse(w, body)
@@ -34,6 +37,7 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 
 	tok, err := TokenProvider.NewToken(userInformation.Username, userInformation.Password)
 	if err != nil {
+		log.Printf("error creating token, err %v", err)
 		body := NewResponse(nil, err)
 		w.WriteHeader(http.StatusBadRequest)
 		writeReponse(w, body)
@@ -57,6 +61,7 @@ func checkToken(w http.ResponseWriter, r *http.Request) {
 
 	err := TokenProvider.CheckToken(reqToken)
 	if err != nil {
+		log.Printf("error checking token, err %v", err)
 		body := NewResponse(nil, err)
 		w.WriteHeader(http.StatusUnauthorized)
 		writeReponse(w, body)
